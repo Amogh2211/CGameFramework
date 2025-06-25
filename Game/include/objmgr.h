@@ -13,6 +13,7 @@ void objMgrRemove(Object* obj);
 
 void objMgrDraw();
 void objMgrUpdate(uint32_t milliseconds);
+void objMgrFixedUpdate(uint32_t milliseconds);
 
 #ifdef __cplusplus
 }

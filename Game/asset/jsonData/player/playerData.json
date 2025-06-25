@@ -1,0 +1,61 @@
+{
+    "spriteSheets": [
+        {
+            "name": "idle",
+            "spriteSheetPath": "asset/sprites/playerSprites/idle.png",
+            "textureWidth": 64,
+            "textureHeight":  320,
+            "frameWidth": 32,
+            "frameHeight": 40,
+            "frameDuration": 600,
+            "directions": [
+                {
+                    "name": "south",
+                    "yOffset": 0,
+                    "numFrames": 2
+                },
+                {
+                    "name": "south-east",
+                    "yOffset": 40,
+                    "numFrames": 2
+                },
+                {
+                    "name": "east",
+                    "yOffset": 80,
+                    "numFrames": 2
+                },
+                {
+                    "name": "norht-east",
+                    "yOffset": 120,
+                    "numFrames": 2
+                },
+                {
+                    "name": "north",
+                    "yOffset": 160,
+                    "numFrames": 2
+                },
+                {
+                    "name": "north-west",
+                    "yOffset": 200,
+                    "numFrames": 2
+                },
+                {
+                    "name": "west",
+                    "yOffset": 240,
+                    "numFrames": 2
+                },
+                {
+                    "name": "south-west",
+                    "yOffset": 280,
+                    "numFrames": 2
+                }
+            ]
+        }
+    ],
+    "stats": {
+        "health": 100,
+        "attack": 20,
+        "defense": 10,
+        "speed": 5
+    }
+}

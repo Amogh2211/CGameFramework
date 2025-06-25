@@ -10,14 +10,17 @@ extern "C" {
 typedef struct object_t Object;
 typedef void (*ObjDrawFunc)(Object*);
 typedef void (*ObjUpdateFunc)(Object*, uint32_t);
+typedef void (*ObjFixedUpdateFunc)(Object*, uint32_t);
 
 typedef struct object_vtable_t {
-    ObjDrawFunc     draw;
-    ObjUpdateFunc   update;
+    ObjDrawFunc        draw;
+    ObjUpdateFunc      update;
+    ObjFixedUpdateFunc fixedUpdate;
 } ObjVtable;
 
 typedef struct object_t {
     ObjVtable*      vtable;
+    uint32_t        nextUpdate;
     Coord2D         position;
     Coord2D         velocity;
 } Object;
@@ -33,6 +36,7 @@ void objInit(Object* obj, ObjVtable* vtable, Coord2D pos, Coord2D vel);
 void objDeinit(Object* obj);
 void objDraw(Object* obj);
 void objUpdate(Object* obj, uint32_t milliseconds);
+void objFixedUpdate(Object* obj, uint32_t milliseconds);
 
 // default update implementation that just moves at the current velocity
 void objDefaultUpdate(Object* obj, uint32_t milliseconds);

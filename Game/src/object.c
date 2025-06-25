@@ -29,7 +29,7 @@ void objInit(Object* obj, ObjVtable* vtable, Coord2D pos, Coord2D vel)
     obj->vtable = vtable;
     obj->position = pos;
     obj->velocity = vel;
-
+    obj->nextUpdate = (uint32_t)FRAME_TIME_MS;
     if (_registerFunc != NULL)
     {
         _registerFunc(obj);
@@ -68,6 +68,23 @@ void objUpdate(Object* obj, uint32_t milliseconds)
     }
 
     objDefaultUpdate(obj, milliseconds);
+}
+
+void objFixedUpdate(Object* obj, uint32_t milliseconds)
+{
+
+    //// Check if the object has to be updated
+    //if (obj->nextUpdate > milliseconds)
+    //{
+    //    obj->nextUpdate -= milliseconds;
+    //    return;
+    //}
+
+    // if object has to be updated, call that function
+    if (obj->vtable != NULL && obj->vtable->fixedUpdate != NULL)
+    {
+        obj->vtable->fixedUpdate(obj, milliseconds);
+    }
 }
 
 void objDefaultUpdate(Object* obj, uint32_t milliseconds)

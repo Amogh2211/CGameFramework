@@ -1,6 +1,10 @@
 #pragma once
+#include <Windows.h>
 #include <stdint.h>
 #include <stdbool.h>
+
+#define TARGET_FPS (double)30
+#define FRAME_TIME_MS (double)(1000 / TARGET_FPS)
 
 typedef struct 
 {

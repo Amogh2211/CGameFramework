@@ -7,7 +7,7 @@ extern "C" {
 
 typedef struct ball_t Ball;
 
-typedef void (*BallCollideCB)(Ball*);
+typedef void (*BallCollideCB) (Ball*);
 void ballSetCollideCB(BallCollideCB cb);
 void ballClearCollideCB();
 

@@ -3,10 +3,14 @@
 #include <gl/GLU.h>
 #include <assert.h>
 #include "baseTypes.h"
+
+
 #include "levelmgr.h"
+#include "utils/jsonPaths.h"
 #include "field.h"
 #include "ball.h"
 #include "face.h"
+#include "player.h"
 #include "objmgr.h"
 #include "SOIL.h"
 #include "sound.h"
@@ -15,9 +19,9 @@ typedef struct level_t
 {
     const LevelDef* def;
 
+    Player* player;
     Field* field;
-    Ball** balls;
-    Face** faces;
+    Ball** enemies;
 } Level;
 
 static int32_t _soundId = SOUND_NOSOUND;
@@ -29,6 +33,11 @@ void levelMgrInit()
 {
     faceInitTextures();
 
+    // inside a sounds.c/h
+    // have a player_sound.h
+    // have a enemy_sound.h
+    // have a level_sound.h
+    // have other ui_sounds.h
     _soundId = soundLoad("asset/beep.wav");
     ballSetCollideCB(_levelMgrPlaySound);
 }
@@ -36,8 +45,8 @@ void levelMgrInit()
 /// @brief Shutdown the level manager
 void levelMgrShutdown()
 {
-    ballClearCollideCB();
     soundUnload(_soundId);
+    ballClearCollideCB();
 }
 
 /// @brief Loads the level and all required objects/assets
@@ -45,6 +54,7 @@ void levelMgrShutdown()
 /// @return 
 Level* levelMgrLoad(const LevelDef* levelDef)
 {
+    // Have something that would read a json or something to populate player stats and enemy data
     Level* level = malloc(sizeof(Level));
     if (level != NULL)
     {
@@ -53,42 +63,17 @@ Level* levelMgrLoad(const LevelDef* levelDef)
         // the field provides the boundaries of the scene & encloses the faces & balls
         level->field = fieldNew(levelDef->fieldBounds, levelDef->fieldColor);
 
+        Bounds2D bounds = { 100.0f, 100.0f };
+        level->player = playerNew(bounds, playerJsonPath);
         // initialize a bunch of balls to bounce around the scene
-        level->balls = malloc(levelDef->numBalls * sizeof(Ball*));
-        if (level->balls != NULL)
+        level->enemies = malloc(levelDef->numEnemies * sizeof(Ball*));
+        if (level->enemies != NULL)
         {
-            for (uint32_t i = 0; i < levelDef->numBalls; ++i)
+            for (uint32_t i = 0; i < levelDef->numEnemies; ++i)
             {
-                level->balls[i] = ballNew(levelDef->fieldBounds);
+                level->enemies[i] = ballNew(levelDef->fieldBounds);
             }
         }
-
-        // initialize a 2d grid of faces for the background
-        level->faces = malloc(levelDef->numFaces * levelDef->numFaces * sizeof(Face*));
-        if (level->faces != NULL)
-        {
-            Coord2D faceSize = boundsGetDimensions(&levelDef->fieldBounds);
-            faceSize.x /= levelDef->numFaces;
-            faceSize.y /= levelDef->numFaces;
-
-            for (uint32_t y = 0; y < levelDef->numFaces; ++y)
-            {
-                float yPos = levelDef->fieldBounds.topLeft.y + (y * faceSize.y);
-
-                for (uint32_t x = 0; x < levelDef->numFaces; ++x)
-                {
-                    float xPos = levelDef->fieldBounds.topLeft.x + (x * faceSize.x);
-
-                    uint32_t faceId = y * levelDef->numFaces + x;
-                    Bounds2D faceBounds = {
-                        {xPos, yPos},
-                        {xPos + faceSize.x, yPos + faceSize.y }
-                    };
-                    level->faces[faceId] = faceNew(faceBounds);
-                }
-            }
-        }
-
     }
     return level;
 }
@@ -99,17 +84,16 @@ void levelMgrUnload(Level* level)
 {
     if (level != NULL) 
     {
-        for (uint32_t i = 0; i < level->def->numFaces * level->def->numFaces; ++i)
+        for (uint32_t i = 0; i < level->def->numPlayers; ++i)
         {
-            faceDelete(level->faces[i]);
+            playerDelete(level->player);
         }
-        free(level->faces);
-
-        for (uint32_t i = 0; i < level->def->numBalls; ++i)
+        free(level->player);
+        for (uint32_t i = 0; i < level->def->numEnemies; ++i)
         {
-            ballDelete(level->balls[i]);
+            ballDelete(level->enemies[i]);
         }
-        free(level->balls);
+        free(level->enemies);
 
         fieldDelete(level->field);
     }

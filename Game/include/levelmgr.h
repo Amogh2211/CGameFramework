@@ -5,11 +5,12 @@
 extern "C" {
 #endif
 
+/// @brief 
 typedef struct leveldef_t {
     Bounds2D fieldBounds;
     uint32_t fieldColor;
-    uint32_t numBalls;
-    uint32_t numFaces;
+    uint32_t numEnemies;
+    uint32_t numPlayers;
 } LevelDef;
 
 typedef struct level_t Level;

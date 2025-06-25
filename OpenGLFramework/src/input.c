@@ -5,6 +5,7 @@
 /// @brief Keyboard state
 typedef struct {
 	bool keyDown[256];
+	bool keyPrev[256];
 } Keyboard;
 
 /// @brief Mouse state
@@ -22,6 +23,11 @@ static Mouse s_Mouse;
 bool inputKeyPressed(char vkCode) 
 {
 	return s_Keyboard.keyDown[vkCode];
+}
+
+bool inputKeyJustPressed(char vkCode)
+{
+	return  s_Keyboard.keyDown[vkCode] && !s_Keyboard.keyPrev[vkCode];
 }
 
 /// @brief Retrieves the current mouse position
@@ -74,6 +80,15 @@ void inputMouseUpdatePosition(Coord2D coords)
 void inputMouseUpdateButton(InputButton button, bool pressed)
 {
 	s_Mouse.buttons[button] = pressed;
+}
+/// @brief Purely for input polling
+void inputUpdate()
+{
+	for (int i = 0; i < 256; i++)
+	{
+		s_Keyboard.keyPrev[i] = s_Keyboard.keyDown[i];
+		s_Keyboard.keyDown[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
+	}
 }
 
 

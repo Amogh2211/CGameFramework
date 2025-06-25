@@ -2,7 +2,6 @@
 #include "input.h"
 #include "application.h"
 #include "framework.h"
-
 #include "levelmgr.h"
 #include "objmgr.h"
 
@@ -12,11 +11,12 @@ static void _gameDraw();
 static void _gameUpdate(uint32_t milliseconds);
 
 static LevelDef _levelDefs[] = {
+
 	{
 		{{50, 50}, {974, 600}},		// fieldBounds
 		0x00ff0000,					// fieldColor
-		20,							// numBalls
-		10							// numFaces
+		20,							// numEnemies
+		1
 	}
 };
 static Level* _curLevel = NULL;
@@ -67,8 +67,8 @@ static void _gameInit()
 /// @brief Cleanup the game and free up any allocated resources
 static void _gameShutdown()
 {
-	levelMgrUnload(_curLevel);
 
+	levelMgrUnload(_curLevel);
 	levelMgrShutdown();
 	objMgrShutdown();
 }
@@ -83,6 +83,7 @@ static void _gameDraw()
 /// @param milliseconds 
 static void _gameUpdate(uint32_t milliseconds)
 {
+
 	// ESC exits the program
 	if (inputKeyPressed(VK_ESCAPE))
 	{
@@ -98,4 +99,5 @@ static void _gameUpdate(uint32_t milliseconds)
 	}
 
 	objMgrUpdate(milliseconds);
+	objMgrFixedUpdate(milliseconds);
 }

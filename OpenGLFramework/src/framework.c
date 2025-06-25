@@ -17,6 +17,8 @@
 #define		CDS_FULLSCREEN 4
 #endif
 
+
+
 static const char CLASS_NAME[] = "OpenGL Application";
 
 typedef struct gl_window_t {						// Contains Information Vital To A Window
@@ -90,9 +92,9 @@ GLWindow* fwInitWindow(Application* app)
 
 bool fwUpdateWindow(GLWindow* window)
 {
+	// --- Windows message pump ---
 	MSG msg;
-
-	if (PeekMessage(&msg, window->hWnd, 0, 0, PM_REMOVE) != 0) 
+	if (PeekMessage(&msg, window->hWnd, 0, 0, PM_REMOVE) != 0)
 	{
 		if (msg.message == WM_QUIT)
 		{
@@ -105,14 +107,16 @@ bool fwUpdateWindow(GLWindow* window)
 	}
 	else
 	{
-		if (window->isVisible) 
+		if (window->isVisible)
 		{
+			// Update application logic
 			ULONGLONG tickCount = GetTickCount64();
 			uint32_t ticks = (uint32_t)(tickCount - window->lastTickCount);
 			window->lastTickCount = tickCount;
 
 			appUpdate(window->app, ticks);
 
+			// Draw frame
 			glDrawStart();
 			appDraw(window->app);
 			glDrawEnd();
@@ -127,6 +131,7 @@ bool fwUpdateWindow(GLWindow* window)
 
 	return true;
 }
+
 
 /// @brief Safely shutdown resources associated with this window and free up memory
 /// @param window 

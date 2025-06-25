@@ -154,25 +154,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\utils\cJSON.c" />
     <ClCompile Include="src\ball.c" />
     <ClCompile Include="src\face.c" />
     <ClCompile Include="src\field.c" />
     <ClCompile Include="src\game.c" />
     <ClCompile Include="src\levelmgr.c" />
+    <ClCompile Include="src\messagequeue.c" />
     <ClCompile Include="src\object.c" />
     <ClCompile Include="src\objmgr.c" />
+    <ClCompile Include="src\player.c" />
     <ClCompile Include="src\random.c" />
     <ClCompile Include="src\shape.c" />
+    <ClCompile Include="src\utils\utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ball.h" />
     <ClInclude Include="include\face.h" />
     <ClInclude Include="include\field.h" />
     <ClInclude Include="include\levelmgr.h" />
+    <ClInclude Include="include\messagequeue.h" />
     <ClInclude Include="include\object.h" />
     <ClInclude Include="include\objmgr.h" />
+    <ClInclude Include="include\player.h" />
     <ClInclude Include="include\random.h" />
     <ClInclude Include="include\shape.h" />
+    <ClInclude Include="include\utils\cJSON.h" />
+    <ClInclude Include="include\utils\drawDefines.h" />
+    <ClInclude Include="include\utils\jsonPaths.h" />
+    <ClInclude Include="include\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="asset\connectionmap.xml" />
@@ -194,6 +204,13 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <FileType>Document</FileType>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="asset\jsonData\player\playerData.json" />
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="asset\sprites\playerSprites\idle.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
